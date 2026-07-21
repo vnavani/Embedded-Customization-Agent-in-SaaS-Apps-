@@ -1,5 +1,5 @@
 /** @vendoai/automations — apps that run on triggers while the user is away
- * (docs/contracts/07-automations.md).
+ * (docs/archive/contracts/07-automations.md).
  *
  * The package root exports exactly the 07 §1 public API.
  * Depends on core + apps only (the one chain); agentic runs go through the

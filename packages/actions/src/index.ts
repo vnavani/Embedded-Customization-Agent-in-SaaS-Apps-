@@ -1,4 +1,4 @@
-/** @vendoai/actions — every API becomes agent tools (docs/contracts/04-actions.md). */
+/** @vendoai/actions — every API becomes agent tools (docs/archive/contracts/04-actions.md). */
 export * from "./formats.js";
 export * from "./connectors/connector.js";
 export { composioConnector } from "./connectors/composio.js";

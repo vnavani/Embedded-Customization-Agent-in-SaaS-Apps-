@@ -1,4 +1,4 @@
-/** @vendoai/guard — policy, approvals, audit, safety (docs/contracts/05-guard.md). */
+/** @vendoai/guard — policy, approvals, audit, safety (docs/archive/contracts/05-guard.md). */
 export { createGuard } from "./guard.js";
 export { vendoAutoJudge } from "./judge.js";
 export type {
