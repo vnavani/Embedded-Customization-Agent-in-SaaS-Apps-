@@ -29,6 +29,12 @@ export interface PolicyRule {
   };
   action: "run" | "ask" | "block";
   note?: string;
+  /** Route approvals minted by this `ask` rule to these subjects instead of
+   *  the requester (multiplayer-enterprise spec, increment 1). The requester
+   *  still sees the pending approval but cannot decide it; the minted grant
+   *  stays scoped to the requester regardless of who approved. Ignored on
+   *  `run`/`block` rules. */
+  approvers?: string[];
 }
 
 export type PolicyFn = (
@@ -80,6 +86,7 @@ export const policyRuleSchema = z
       .strict(),
     action: z.enum(["run", "ask", "block"]),
     note: z.string().optional(),
+    approvers: z.array(z.string().min(1)).optional(),
   })
   .strict() satisfies z.ZodType<PolicyRule>;
 

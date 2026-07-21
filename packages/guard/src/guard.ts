@@ -62,6 +62,7 @@ type DraftDecision =
   | {
       action: "ask";
       decidedBy: Extract<GuardDecision, { action: "ask" }>["decidedBy"];
+      approvers?: string[];
     }
   | {
       action: "block";
@@ -305,7 +306,7 @@ class GuardImplementation implements VendoGuard {
   async abandonApprovals(ids: ApprovalId[], ctx: RunContext): Promise<void> {
     for (const id of ids) {
       try {
-        await this.#decideApprovals(id, { approve: false }, ctx.principal);
+        await this.#decideApprovals(id, { approve: false }, ctx.principal, { system: true });
       } catch (error) {
         if (error instanceof VendoError && (error.code === "conflict" || error.code === "not-found")) {
           continue;
@@ -335,7 +336,11 @@ class GuardImplementation implements VendoGuard {
       if (!Number.isFinite(parkedAt) || parkedAt + ttlMs > at) continue;
       try {
         // Deny as the approval's OWN principal — a foreign subject would 404.
-        await this.#decideApprovals(record.id, { approve: false }, data.request.ctx.principal);
+        // system: routed approvals must expire too, though their requester
+        // cannot normally decide them.
+        await this.#decideApprovals(record.id, { approve: false }, data.request.ctx.principal, {
+          system: true,
+        });
         swept += 1;
       } catch (error) {
         // Already decided (conflict) or gone (not-found): the queue already
@@ -484,7 +489,7 @@ class GuardImplementation implements VendoGuard {
 
     if (draft.action === "ask") {
       const invalidated = metadata.invalidatedGrants ?? [];
-      const approval = await this.#parkApproval(call, effectiveDescriptor, ctx, invalidated[0]);
+      const approval = await this.#parkApproval(call, effectiveDescriptor, ctx, invalidated[0], draft.approvers);
       const decision: GuardDecision = {
         action: "ask",
         approval,
@@ -640,6 +645,11 @@ class GuardImplementation implements VendoGuard {
       if (rule.action === "block") {
         return withInvalidated({
           decision: { action: "block", reason: rule.note ?? "blocked by policy rule", decidedBy: "rule" },
+        });
+      }
+      if (rule.action === "ask" && rule.approvers !== undefined && rule.approvers.length > 0) {
+        return withInvalidated({
+          decision: { action: "ask", decidedBy: "rule", approvers: rule.approvers },
         });
       }
       return withInvalidated({ decision: { action: rule.action, decidedBy: "rule" } });
@@ -844,6 +854,7 @@ class GuardImplementation implements VendoGuard {
     descriptor: ToolDescriptor,
     ctx: RunContext,
     invalidatedGrant?: PermissionGrant,
+    approvers?: string[],
   ): Promise<ApprovalRequest> {
     const request: ApprovalRequest = {
       id: makeId("apr_") as ApprovalId,
@@ -858,6 +869,7 @@ class GuardImplementation implements VendoGuard {
               grantedAt: invalidatedGrant.grantedAt,
             },
           }),
+      ...(approvers === undefined || approvers.length === 0 ? {} : { approvers: [...approvers] }),
       ctx: {
         principal: cloneJson(ctx.principal),
         venue: ctx.venue,
@@ -884,19 +896,41 @@ class GuardImplementation implements VendoGuard {
     const records = await listAll(this.#store.records(APPROVALS_COLLECTION), {
       refs: { subject: principal.subject, status: "pending" },
     });
-    return records
+    const own = records
       .map(approvalData)
       .filter(
         (data) =>
           data.status === "pending" && data.request.ctx.principal.subject === principal.subject,
       )
       .map((data) => data.request);
+    // Routed approvals are visible to their designated approvers too. The
+    // approver set lives inside the request document, not a ref, so this scans
+    // the pending set — small by construction (abandoned on the next thread
+    // turn, TTL-swept otherwise), and the same shape the sweep already uses.
+    const pending = await listAll(this.#store.records(APPROVALS_COLLECTION), {
+      refs: { status: "pending" },
+    });
+    const seen = new Set(own.map((request) => request.id));
+    const routed = pending
+      .map(approvalData)
+      .filter(
+        (data) =>
+          data.status === "pending" &&
+          !seen.has(data.request.id) &&
+          data.request.approvers !== undefined &&
+          data.request.approvers.includes(principal.subject),
+      )
+      .map((data) => data.request);
+    return [...own, ...routed];
   }
 
   async #decideApprovals(
     ids: ApprovalId | ApprovalId[],
     decision: ApprovalDecision,
     principal: Principal,
+    // System paths (abandon, TTL sweep) deny as the requester and must keep
+    // working on routed approvals the requester cannot decide.
+    options?: { system?: boolean },
   ): Promise<void> {
     const normalizedIds = Array.isArray(ids) ? ids : [ids];
     const store = this.#store.records(APPROVALS_COLLECTION);
@@ -907,7 +941,25 @@ class GuardImplementation implements VendoGuard {
         throw new VendoError("not-found", `Approval ${id} was not found`);
       }
       const data = approvalData(record);
-      if (data.request.ctx.principal.subject !== principal.subject) {
+      const requester = data.request.ctx.principal.subject;
+      const approvers = data.request.approvers;
+      if (options?.system === true) {
+        // System paths act AS the requester: approver routing is bypassed
+        // (routed approvals must still expire/abandon), but subject isolation
+        // holds — a foreign approval reads as not-found.
+        if (requester !== principal.subject) {
+          throw new VendoError("not-found", `Approval ${id} was not found`);
+        }
+      } else if (approvers !== undefined && approvers.length > 0) {
+        if (!approvers.includes(principal.subject)) {
+          // The requester knows this approval exists; anyone else must not
+          // learn it does (same anti-enumeration stance as foreign subjects).
+          if (principal.subject === requester) {
+            throw new VendoError("blocked", `Approval ${id} is routed to designated approvers`);
+          }
+          throw new VendoError("not-found", `Approval ${id} was not found`);
+        }
+      } else if (requester !== principal.subject) {
         throw new VendoError("not-found", `Approval ${id} was not found`);
       }
       if (data.status !== "pending") {
@@ -923,10 +975,12 @@ class GuardImplementation implements VendoGuard {
       }
       const decidedAt = now();
       const status = decision.approve ? "approved" : "denied";
+      // Refs and any minted grant stay keyed to the REQUESTER: who approved
+      // never changes whose authority the approval carries.
       await store.put({
         id,
         data: { ...data, status, decidedAt },
-        refs: { subject: principal.subject, status },
+        refs: { subject: requester, status },
       });
 
       let grant: PermissionGrant | undefined;
@@ -934,7 +988,7 @@ class GuardImplementation implements VendoGuard {
         const duration = decision.remember.duration;
         grant = {
           id: makeId("grt_") as GrantId,
-          subject: principal.subject,
+          subject: requester,
           tool: data.request.call.tool,
           descriptorHash: descriptorHash(data.request.descriptor),
           scope: normalizeRememberedScope(decision.remember.scope, data.request),
@@ -975,6 +1029,9 @@ class GuardImplementation implements VendoGuard {
         detail: {
           approved: decision.approve,
           ...(grant === undefined ? {} : { grantId: grant.id }),
+          // A routed decision names its decider; the event's principal stays
+          // the requester (the partition key does not move).
+          ...(principal.subject === requester ? {} : { actor: cloneJson(principal) }),
         },
       });
 
