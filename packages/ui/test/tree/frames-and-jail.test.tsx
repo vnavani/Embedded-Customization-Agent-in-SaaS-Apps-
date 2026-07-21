@@ -76,7 +76,7 @@ describe("AppFrame", () => {
       expect(reopen).toHaveBeenCalledTimes(1);
       // While the re-open is in flight, the EXISTING wake/loading state
       // replaces the stale iframe — no dead embed under the user.
-      expect(screen.getByLabelText("Vendo app resuming")).toBeTruthy();
+      expect(screen.getByLabelText("App resuming")).toBeTruthy();
       expect(screen.queryByTitle("Vendo app")).toBeNull();
       // The re-open lands a fresh surface URL; the frame comes back on it.
       await act(async () => {
@@ -98,7 +98,7 @@ describe("AppFrame", () => {
 
   it("renders a dimmed non-interactive resuming cover", () => {
     render(<AppFrame surface={{ kind: "resuming", cover: "data:image/png;base64,AA==" }} />);
-    const frame = screen.getByLabelText("Vendo app resuming");
+    const frame = screen.getByLabelText("App resuming");
     expect(frame.getAttribute("aria-busy")).toBe("true");
     expect(frame.style.pointerEvents).toBe("none");
     expect(screen.getByRole("img", { name: "App loading cover" }).getAttribute("src"))

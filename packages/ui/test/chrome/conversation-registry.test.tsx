@@ -26,7 +26,7 @@ describe("openVendoConversation registry", () => {
     await wire.close();
   });
 
-  const dialog = () => screen.getByRole("dialog", { name: "Vendo assistant" });
+  const dialog = () => screen.getByRole("dialog", { name: "AI assistant" });
 
   it("reports false with no overlay mounted", () => {
     expect(openVendoConversation({ prompt: "anything" })).toBe(false);
@@ -72,7 +72,7 @@ describe("openVendoConversation registry", () => {
 
   it("prefills the composer WITHOUT sending by default (safe for destructive prompts)", async () => {
     render(<VendoProvider client={client}><VendoOverlay /></VendoProvider>);
-    expect(screen.queryByRole("dialog", { name: "Vendo assistant" })).toBeNull();
+    expect(screen.queryByRole("dialog", { name: "AI assistant" })).toBeNull();
 
     let opened: boolean | undefined;
     act(() => {
@@ -94,7 +94,7 @@ describe("openVendoConversation registry", () => {
     act(() => {
       openVendoConversation();
     });
-    expect(await screen.findByRole("dialog", { name: "Vendo assistant" })).toBeTruthy();
+    expect(await screen.findByRole("dialog", { name: "AI assistant" })).toBeTruthy();
     expect((within(dialog()).getByRole("textbox", { name: "Message" }) as HTMLTextAreaElement).value).toBe("");
   });
 

@@ -19,13 +19,13 @@ test("thread is keyboard-complete with visible focus", async ({ page }) => {
 
 test("overlay focus trap and Escape are keyboard-complete", async ({ page }) => {
   await openScenario(page, "overlay");
-  await expect(page.getByRole("dialog", { name: "Vendo assistant" })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "AI assistant" })).toBeVisible();
   await expectKeyboardReachability(page, '[role="dialog"]');
   await page.keyboard.press("Escape");
   const launcher = page.getByRole("button", { name: "AI agent" });
   await expect(launcher).toBeFocused();
   await page.keyboard.press("Enter");
-  await expect(page.getByRole("dialog", { name: "Vendo assistant" })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "AI assistant" })).toBeVisible();
 });
 
 test("⌘K surface reaches and fires commands with keyboard only", async ({ page }) => {
@@ -34,7 +34,7 @@ test("⌘K surface reaches and fires commands with keyboard only", async ({ page
   // inside the focus trap. A second ⌘K (from anywhere inside the surface)
   // toggles it closed and focus restores to the invoker.
   await openScenario(page, "palette");
-  const dialog = page.getByRole("dialog", { name: "Vendo assistant" });
+  const dialog = page.getByRole("dialog", { name: "AI assistant" });
   await expect(dialog).toBeVisible();
   await expect(page.getByRole("textbox", { name: "Message" })).toBeFocused();
   await tabTo(page, async () => page.evaluate(() => document.activeElement?.textContent?.trim() === "Open Invoices"));

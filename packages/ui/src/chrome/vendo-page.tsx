@@ -253,7 +253,7 @@ export function VendoPage() {
       <main
         className={`fl-page${takeover.active ? " fl-takeover" : ""}`}
         style={takeover.style}
-        aria-label="Vendo workspace"
+        aria-label="AI workspace"
       >
         <div className="fl-tabbar" role="tablist" aria-label="Workspace sections">
           {TABS.map((item, index) => (

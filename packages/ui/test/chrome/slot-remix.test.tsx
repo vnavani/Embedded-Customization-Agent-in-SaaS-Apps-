@@ -101,7 +101,7 @@ describe("VendoSlot remix flag + overlay registry", () => {
       </VendoProvider>,
     );
     fireEvent.click(screen.getByRole("button", { name: /remix/i }));
-    expect(await screen.findByRole("dialog", { name: "Vendo assistant" })).toBeTruthy();
+    expect(await screen.findByRole("dialog", { name: "AI assistant" })).toBeTruthy();
     // Prefilled in the composer, not sent: no thread turn, no wire fork.
     await waitFor(() => {
       const composer = screen.getByRole("textbox") as HTMLTextAreaElement;
@@ -124,7 +124,7 @@ describe("VendoSlot remix flag + overlay registry", () => {
       </VendoProvider>,
     );
     fireEvent.click(screen.getByRole("button", { name: /remix/i }));
-    expect(await screen.findByRole("dialog", { name: "Vendo assistant" })).toBeTruthy();
+    expect(await screen.findByRole("dialog", { name: "AI assistant" })).toBeTruthy();
     await waitFor(() => {
       const composer = screen.getByRole("textbox") as HTMLTextAreaElement;
       expect(composer.value).toBe("Update my hero remix");

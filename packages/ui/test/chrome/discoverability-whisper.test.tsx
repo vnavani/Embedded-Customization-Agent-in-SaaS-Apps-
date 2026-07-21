@@ -84,7 +84,7 @@ describe("whisper launcher (ui-usage-dx §6 — ambient discoverability)", () =>
     expect(caption()).toBeNull();
     expect(hasSeen("whisper")).toBe(false);
     act(() => {
-      screen.getByRole("button", { name: "Close Vendo" }).click();
+      screen.getByRole("button", { name: "Close assistant" }).click();
     });
     // The launcher is visible again — NOW the first showing happens.
     expect(caption()).toBeTruthy();
@@ -115,5 +115,17 @@ describe("whisper launcher (ui-usage-dx §6 — ambient discoverability)", () =>
       launcher().click();
     });
     expect(caption()).toBeNull();
+  });
+
+  it("white-label default caption names no product; the whisper prop rebrands it", () => {
+    renderOverlay();
+    expect(screen.getByText("Ask the agent to build the view you need.")).toBeTruthy();
+    cleanup();
+    window.localStorage.clear();
+    renderOverlay(
+      <VendoOverlay whisper={{ title: "Meet Maple AI", caption: "Ask Maple to build the view you need." }} />,
+    );
+    expect(screen.getByText("Meet Maple AI")).toBeTruthy();
+    expect(screen.getByText("Ask Maple to build the view you need.")).toBeTruthy();
   });
 });

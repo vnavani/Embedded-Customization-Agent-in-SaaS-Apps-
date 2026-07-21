@@ -63,6 +63,12 @@ export interface VendoOverlayProps {
    * provider's `greeting`.
    */
   greeting?: VendoGreeting;
+  /**
+   * Copy for the fire-once whisper caption on the launcher (ui-usage-dx §6).
+   * WHITE-LABEL defaults — neutral "agent" wording, never a product name
+   * (ui-lane-entry rule); hosts put their brand voice here.
+   */
+  whisper?: { title?: string; caption?: string };
 }
 
 /** Whisper caption duration — long enough to read two short lines, short
@@ -112,6 +118,7 @@ export function VendoOverlay({
   thread: Thread = VendoThread,
   discoverability,
   greeting,
+  whisper,
 }: VendoOverlayProps = {}) {
   const controlled = openProp !== undefined;
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
@@ -361,10 +368,10 @@ export function VendoOverlay({
         style={takeover.style}
         role="dialog"
         aria-modal="true"
-        aria-label="Vendo assistant"
+        aria-label="AI assistant"
         onKeyDown={onKeyDown}
       >
-        <strong className="fl-sr-only">Vendo</strong>
+        <strong className="fl-sr-only">AI assistant</strong>
         {/* ENG-221: the explicit fresh-start affordance — closing never discards
             the conversation, so THIS is how a new one begins. Shares the close
             button's quiet header treatment; .fl-overlay-new only shifts it left. */}
@@ -374,7 +381,7 @@ export function VendoOverlay({
           </svg>
           <span className="fl-sr-only">New conversation</span>
         </button>
-        <button className="fl-overlay-close" type="button" aria-label="Close Vendo" onClick={close}>
+        <button className="fl-overlay-close" type="button" aria-label="Close assistant" onClick={close}>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
             <path d="M18 6 6 18M6 6l12 12" />
           </svg>
@@ -416,8 +423,8 @@ export function VendoOverlay({
           it polite for assistive tech. */}
       {!launcherHidden && whisperActive && !open ? (
         <div className="fl-whisper" data-vendo-launcher={launcherPosition} role="status">
-          <strong>You can reshape this app</strong>
-          <span>Ask Vendo to build the view you need.</span>
+          <strong>{whisper?.title ?? "You can reshape this app"}</strong>
+          <span>{whisper?.caption ?? "Ask the agent to build the view you need."}</span>
         </div>
       ) : null}
       {portal}

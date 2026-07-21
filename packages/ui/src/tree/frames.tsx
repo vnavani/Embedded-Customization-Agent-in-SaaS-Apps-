@@ -65,7 +65,7 @@ function httpFrameSandbox(url: string): string {
 function ResumingCover({ cover }: { cover?: string }) {
   return (
     <div
-      aria-label="Vendo app resuming"
+      aria-label="App resuming"
       aria-busy="true"
       style={{
         position: "relative",

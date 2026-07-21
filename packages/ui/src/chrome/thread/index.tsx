@@ -310,7 +310,7 @@ export function VendoThread({
   if (landing) {
     return (
       <ChromeRoot>
-        <div className="fl-thread" role="region" aria-label="Vendo conversation" {...dropProps}>
+        <div className="fl-thread" role="region" aria-label="AI conversation" {...dropProps}>
           {dropOverlay}
           <div className="fl-landing">
             {tutorialActive ? (
@@ -383,7 +383,7 @@ export function VendoThread({
 
   return (
     <ChromeRoot>
-      <div className="fl-thread" role="region" aria-label="Vendo conversation" {...dropProps}>
+      <div className="fl-thread" role="region" aria-label="AI conversation" {...dropProps}>
         {dropOverlay}
         <MessageList
           scroll={scroll}

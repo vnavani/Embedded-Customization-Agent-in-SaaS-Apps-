@@ -10,7 +10,8 @@ export interface VendoTriggerProps {
   /** Optional context appended to the prompt (blank-line separated) — the
    *  record or state on screen, so the agent starts oriented. */
   context?: string;
-  /** Button label. Default "Ask Vendo". */
+  /** Button label. Default "Ask AI" — white-label, never a product name
+   *  (ui-lane-entry rule); hosts brand it via children. */
   children?: ReactNode;
 }
 
@@ -48,7 +49,7 @@ export function VendoTrigger({ prompt, context, children }: VendoTriggerProps) {
           <path d="m12 3 1.4 4.1L17.5 8.5l-4.1 1.4L12 14l-1.4-4.1-4.1-1.4 4.1-1.4L12 3Z" />
           <path d="m18 14 .8 2.2L21 17l-2.2.8L18 20l-.8-2.2L15 17l2.2-.8L18 14Z" />
         </svg>
-        {children ?? "Ask Vendo"}
+        {children ?? "Ask AI"}
       </button>
     </ChromeRoot>
   );

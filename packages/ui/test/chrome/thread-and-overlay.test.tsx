@@ -70,8 +70,8 @@ describe("VendoThread and VendoOverlay exports", () => {
     const launcher = screen.getByRole("button", { name: "AI agent" });
     launcher.focus();
     fireEvent.click(launcher);
-    const dialog = screen.getByRole("dialog", { name: "Vendo assistant" });
-    const close = await screen.findByRole("button", { name: "Close Vendo" });
+    const dialog = screen.getByRole("dialog", { name: "AI assistant" });
+    const close = await screen.findByRole("button", { name: "Close assistant" });
     // ENG-220: initial focus lands in the composer, not on the close button.
     const textarea = screen.getByRole("textbox", { name: "Message" });
     await waitFor(() => expect(document.activeElement).toBe(textarea));
@@ -86,7 +86,7 @@ describe("VendoThread and VendoOverlay exports", () => {
     expect(close).toBeTruthy(); // still present, after the new-conversation affordance
 
     fireEvent.keyDown(dialog, { key: "Escape" });
-    expect(screen.queryByRole("dialog", { name: "Vendo assistant" })).toBeNull();
+    expect(screen.queryByRole("dialog", { name: "AI assistant" })).toBeNull();
     await waitFor(() => expect(document.activeElement).toBe(launcher));
     expect(launcher.getAttribute("aria-expanded")).toBe("false");
   });

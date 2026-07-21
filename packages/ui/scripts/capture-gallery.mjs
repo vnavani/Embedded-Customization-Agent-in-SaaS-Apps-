@@ -107,7 +107,7 @@ const BEATS = {
     scenario: "overlay",
     viewport: MOBILE,
     async play(page) {
-      await page.getByRole("dialog", { name: "Vendo assistant" }).waitFor({ timeout: 8000 }).catch(() => {});
+      await page.getByRole("dialog", { name: "AI assistant" }).waitFor({ timeout: 8000 }).catch(() => {});
       await wait(1800);
     },
   },

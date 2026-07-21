@@ -38,7 +38,7 @@ describe("VendoPalette singleton, host-collision-safe keybinding", () => {
     // The keybinding TOGGLES the one-surface overlay: double delivery (the
     // pre-ENG-222 bug) would toggle twice and leave it closed. Exactly one
     // delivery leaves exactly one open dialog.
-    const dialogs = await screen.findAllByRole("dialog", { name: "Vendo assistant" });
+    const dialogs = await screen.findAllByRole("dialog", { name: "AI assistant" });
     expect(dialogs).toHaveLength(1);
   });
 
@@ -53,7 +53,7 @@ describe("VendoPalette singleton, host-collision-safe keybinding", () => {
     hostInput.focus();
     fireEvent.keyDown(hostInput, { key: "k", metaKey: true });
     // The host keeps its own ⌘K inside its own field.
-    expect(screen.queryByRole("dialog", { name: "Vendo assistant" })).toBeNull();
+    expect(screen.queryByRole("dialog", { name: "AI assistant" })).toBeNull();
     expect(document.activeElement).toBe(hostInput);
   });
 
@@ -68,15 +68,15 @@ describe("VendoPalette singleton, host-collision-safe keybinding", () => {
     screen.getByRole("button", { name: "Opener" }).focus();
     // The default ⌘K no longer opens a surface bound to ⌘J.
     fireEvent.keyDown(globalThis, { key: "k", metaKey: true });
-    expect(screen.queryByRole("dialog", { name: "Vendo assistant" })).toBeNull();
+    expect(screen.queryByRole("dialog", { name: "AI assistant" })).toBeNull();
     // The configured chord opens it.
     fireEvent.keyDown(globalThis, { key: "j", metaKey: true });
-    const dialog = await screen.findByRole("dialog", { name: "Vendo assistant" });
+    const dialog = await screen.findByRole("dialog", { name: "AI assistant" });
     expect(dialog).toBeTruthy();
     // Close it before disabling (disabling stops the keybinding, it doesn't
     // close an already-open surface).
     fireEvent.keyDown(dialog, { key: "Escape" });
-    await waitFor(() => expect(screen.queryByRole("dialog", { name: "Vendo assistant" })).toBeNull());
+    await waitFor(() => expect(screen.queryByRole("dialog", { name: "AI assistant" })).toBeNull());
 
     // Disabling the keybinding leaves no keyboard opener at all.
     rerender(
@@ -86,9 +86,9 @@ describe("VendoPalette singleton, host-collision-safe keybinding", () => {
         <VendoOverlay launcher="none" />
       </VendoProvider>,
     );
-    await waitFor(() => expect(screen.queryByRole("dialog", { name: "Vendo assistant" })).toBeNull());
+    await waitFor(() => expect(screen.queryByRole("dialog", { name: "AI assistant" })).toBeNull());
     fireEvent.keyDown(globalThis, { key: "k", metaKey: true });
     fireEvent.keyDown(globalThis, { key: "j", metaKey: true });
-    expect(screen.queryByRole("dialog", { name: "Vendo assistant" })).toBeNull();
+    expect(screen.queryByRole("dialog", { name: "AI assistant" })).toBeNull();
   });
 });

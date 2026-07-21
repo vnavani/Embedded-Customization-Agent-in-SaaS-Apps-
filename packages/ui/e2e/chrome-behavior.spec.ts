@@ -14,8 +14,8 @@ test("thread sends a real streamed turn and renders the assistant delta", async 
 
 test("overlay traps focus, closes on Escape, and restores the launcher", async ({ page }) => {
   await openScenario(page, "overlay");
-  const dialog = page.getByRole("dialog", { name: "Vendo assistant" });
-  const close = page.getByRole("button", { name: "Close Vendo" });
+  const dialog = page.getByRole("dialog", { name: "AI assistant" });
+  const close = page.getByRole("button", { name: "Close assistant" });
   const composer = page.getByRole("textbox", { name: "Message" });
   await expect(dialog).toBeVisible();
   // ENG-220: initial focus lands in the composer, not on the close button.
@@ -34,7 +34,7 @@ test("⌘K chip strip records the selected public command", async ({ page }) => 
   // onCommand router receives the activation exactly as it did from the old
   // palette rows.
   await openScenario(page, "palette");
-  await expect(page.getByRole("dialog", { name: "Vendo assistant" })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "AI assistant" })).toBeVisible();
   await page.getByRole("toolbar", { name: "Commands" }).getByRole("button", { name: "Open Invoices" }).click();
   await expect(page.getByTestId("command-recorder")).toContainText('"kind":"open-app"');
   await expect(page.getByTestId("command-recorder")).toContainText('"appId":"app_1"');

@@ -40,9 +40,9 @@ describe("VendoPalette self-sufficient defaults (one-surface)", () => {
         <VendoOverlay launcher="none" />
       </VendoProvider>,
     );
-    expect(screen.queryByRole("dialog", { name: "Vendo assistant" })).toBeNull();
+    expect(screen.queryByRole("dialog", { name: "AI assistant" })).toBeNull();
     pressHotkey();
-    expect(await screen.findByRole("dialog", { name: "Vendo assistant" })).toBeTruthy();
+    expect(await screen.findByRole("dialog", { name: "AI assistant" })).toBeTruthy();
     // There is no separate command palette surface anymore.
     expect(screen.queryByRole("dialog", { name: "Vendo command palette" })).toBeNull();
     expect(screen.queryByRole("combobox")).toBeNull();
@@ -61,11 +61,11 @@ describe("VendoPalette self-sufficient defaults (one-surface)", () => {
       </VendoProvider>,
     );
     pressHotkey();
-    await screen.findByRole("dialog", { name: "Vendo assistant" });
+    await screen.findByRole("dialog", { name: "AI assistant" });
     const strip = await screen.findByRole("toolbar", { name: "Commands" });
     fireEvent.click(within(strip).getByRole("button", { name: "New conversation" }));
     // Still the one surface, resting on a fresh empty landing.
-    expect(screen.getByRole("dialog", { name: "Vendo assistant" })).toBeTruthy();
+    expect(screen.getByRole("dialog", { name: "AI assistant" })).toBeTruthy();
     expect(await screen.findByText("What can I help you build?")).toBeTruthy();
   });
 
@@ -75,7 +75,7 @@ describe("VendoPalette self-sufficient defaults (one-surface)", () => {
     render(<VendoProvider client={client}><VendoPalette /></VendoProvider>);
     pressHotkey();
     await waitFor(() => expect(warn).toHaveBeenCalledWith(expect.stringContaining("VendoOverlay")));
-    expect(screen.queryByRole("dialog", { name: "Vendo assistant" })).toBeNull();
+    expect(screen.queryByRole("dialog", { name: "AI assistant" })).toBeNull();
   });
 
   it("hints in dev for commands that need a host router (show-activity)", async () => {
@@ -88,7 +88,7 @@ describe("VendoPalette self-sufficient defaults (one-surface)", () => {
       </VendoProvider>,
     );
     pressHotkey();
-    await screen.findByRole("dialog", { name: "Vendo assistant" });
+    await screen.findByRole("dialog", { name: "AI assistant" });
     fireEvent.click(await screen.findByRole("button", { name: "Show activity" }));
     expect(warn).toHaveBeenCalledWith(expect.stringContaining("onCommand"));
   });
@@ -102,13 +102,13 @@ describe("VendoPalette self-sufficient defaults (one-surface)", () => {
       </VendoProvider>,
     );
     pressHotkey();
-    await screen.findByRole("dialog", { name: "Vendo assistant" });
+    await screen.findByRole("dialog", { name: "AI assistant" });
     const strip = await screen.findByRole("toolbar", { name: "Commands" });
     fireEvent.click(within(strip).getByRole("button", { name: "New conversation" }));
     await waitFor(() => expect(onCommand).toHaveBeenCalledWith(expect.objectContaining({ kind: "new-conversation" })));
     // Host-routed commands close the surface first (the old palette's
     // close-on-select) so host navigation never lands behind the modal.
-    expect(screen.queryByRole("dialog", { name: "Vendo assistant" })).toBeNull();
+    expect(screen.queryByRole("dialog", { name: "AI assistant" })).toBeNull();
   });
 
   it("collapses an empty launcher label to the accessible blob-only orb", () => {

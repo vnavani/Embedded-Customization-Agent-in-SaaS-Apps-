@@ -90,7 +90,7 @@ describe("mobile takeover (ENG-228)", () => {
     await wire.close();
   });
 
-  const panel = () => screen.getByRole("dialog", { name: "Vendo assistant" });
+  const panel = () => screen.getByRole("dialog", { name: "AI assistant" });
 
   it("stamps fl-takeover on the overlay panel at the mobile breakpoint", () => {
     installMatchMedia(true);
@@ -122,7 +122,7 @@ describe("mobile takeover (ENG-228)", () => {
   it("stamps fl-takeover on the page surface and portals it over the host (transformed ancestors)", () => {
     installMatchMedia(true);
     const { container } = render(<VendoProvider client={client}><VendoPage /></VendoProvider>);
-    const page = screen.getByRole("main", { name: "Vendo workspace" });
+    const page = screen.getByRole("main", { name: "AI workspace" });
     expect(page.classList.contains("fl-takeover")).toBe(true);
     // position:fixed is captured by any transformed/filtered host ancestor
     // (page-transition animations are everywhere), so full-bleed is only real
@@ -136,7 +136,7 @@ describe("mobile takeover (ENG-228)", () => {
   it("keeps the desktop page in-tree in the host layout", () => {
     installMatchMedia(false);
     const { container } = render(<VendoProvider client={client}><VendoPage /></VendoProvider>);
-    const page = screen.getByRole("main", { name: "Vendo workspace" });
+    const page = screen.getByRole("main", { name: "AI workspace" });
     expect(page.classList.contains("fl-takeover")).toBe(false);
     expect(container.contains(page)).toBe(true);
   });
@@ -149,7 +149,7 @@ describe("mobile takeover (ENG-228)", () => {
       <VendoProvider client={client}><VendoPalette /><VendoOverlay launcher="none" /></VendoProvider>,
     );
     fireEvent.keyDown(globalThis, { key: "k", ctrlKey: true });
-    const dialog = await screen.findByRole("dialog", { name: "Vendo assistant" });
+    const dialog = await screen.findByRole("dialog", { name: "AI assistant" });
     expect(dialog.classList.contains("fl-takeover")).toBe(true);
     expect(container.contains(dialog)).toBe(false);
     expect(dialog.closest(".fl-overlay-portal")!.parentElement).toBe(document.body);
@@ -161,7 +161,7 @@ describe("mobile takeover (ENG-228)", () => {
       <VendoProvider client={client}><VendoPalette /><VendoOverlay launcher="none" /></VendoProvider>,
     );
     fireEvent.keyDown(globalThis, { key: "k", ctrlKey: true });
-    const dialog = await screen.findByRole("dialog", { name: "Vendo assistant" });
+    const dialog = await screen.findByRole("dialog", { name: "AI assistant" });
     expect(dialog.classList.contains("fl-takeover")).toBe(false);
   });
 
@@ -205,11 +205,11 @@ describe("mobile takeover (ENG-228)", () => {
     );
     expect(panel()).toBeTruthy();
     fireEvent.keyDown(globalThis, { key: "k", ctrlKey: true });
-    await waitFor(() => expect(screen.queryByRole("dialog", { name: "Vendo assistant" })).toBeNull());
+    await waitFor(() => expect(screen.queryByRole("dialog", { name: "AI assistant" })).toBeNull());
     // No palette dialog ever mounts — the keybinding owns ONE surface.
     expect(screen.queryByRole("dialog", { name: "Vendo command palette" })).toBeNull();
     fireEvent.keyDown(globalThis, { key: "k", ctrlKey: true });
-    expect(await screen.findByRole("dialog", { name: "Vendo assistant" })).toBeTruthy();
+    expect(await screen.findByRole("dialog", { name: "AI assistant" })).toBeTruthy();
   });
 
   it("does not track the keyboard on desktop", () => {
