@@ -99,7 +99,7 @@ const HEROES = {
       // The auto-open microtask can race first mount in dev — click the
       // harness's explicit opener instead.
       await page.locator('main[data-scenario="palette"]').waitFor();
-      const dialog = page.getByRole("dialog", { name: "Vendo assistant" });
+      const dialog = page.getByRole("dialog", { name: "AI assistant" });
       if (!(await dialog.isVisible().catch(() => false))) {
         await page.getByTestId("palette-opener").click();
       }

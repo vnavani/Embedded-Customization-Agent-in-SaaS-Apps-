@@ -21,7 +21,7 @@ describe("VendoOverlay supported entry API", () => {
     await wire.close();
   });
 
-  const dialogQuery = () => screen.queryByRole("dialog", { name: "Vendo assistant" });
+  const dialogQuery = () => screen.queryByRole("dialog", { name: "AI assistant" });
 
   /** Type into the visible composer and send; waits for the streamed reply
    *  ("Turn complete" — `turns` counts completed replies across the session). */
@@ -114,7 +114,7 @@ describe("VendoOverlay supported entry API", () => {
     // The portal subtree itself must stay interactive.
     expect(dialogQuery()!.closest("[inert]")).toBeNull();
 
-    fireEvent.click(screen.getByRole("button", { name: "Close Vendo" }));
+    fireEvent.click(screen.getByRole("button", { name: "Close assistant" }));
     expect(document.body.style.overflow).toBe("");
     expect(host.hasAttribute("inert")).toBe(false);
   });
@@ -153,7 +153,7 @@ describe("VendoOverlay supported entry API", () => {
     const composer = screen.getByRole("textbox", { name: "Message" });
     await waitFor(() => expect(document.activeElement).toBe(composer));
 
-    fireEvent.keyDown(screen.getByRole("dialog", { name: "Vendo assistant" }), { key: "Escape" });
+    fireEvent.keyDown(screen.getByRole("dialog", { name: "AI assistant" }), { key: "Escape" });
     // Never dumped on <body>: focus returns to the element that opened it.
     await waitFor(() => expect(document.activeElement).toBe(invoker));
   });
@@ -268,7 +268,7 @@ describe("VendoOverlay supported entry API", () => {
     // Hide the invoker while the overlay is open — restore must skip it and
     // fall back to the (visible) launcher rather than dropping focus on body.
     visible.style.display = "none";
-    fireEvent.keyDown(screen.getByRole("dialog", { name: "Vendo assistant" }), { key: "Escape" });
+    fireEvent.keyDown(screen.getByRole("dialog", { name: "AI assistant" }), { key: "Escape" });
     const launcher = screen.getByRole("button", { name: "AI agent" });
     await waitFor(() => expect(document.activeElement).toBe(launcher));
     expect(document.activeElement).not.toBe(document.body);

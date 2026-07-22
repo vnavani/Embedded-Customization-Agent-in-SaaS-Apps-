@@ -200,7 +200,7 @@ export interface StackOptions {
   model?: LanguageModel;
   /** Mount the MCP door (J6) beside `vendo.handler` on the same loopback origin,
    * composed from the umbrella's OWN parts — the way a host must today until the
-   * `createVendo({ mcp: true })` hookup lands (docs/contracts/10-mcp-umbrella-hookup.md). */
+   * `createVendo({ mcp: true })` hookup lands (docs/archive/contracts/10-mcp-umbrella-hookup.md). */
   mcp?: boolean;
   /** Compose the umbrella with `telemetry: true` (opt-in anonymous telemetry).
    * Consent is still resolved at emit time from env/config (J11). */

@@ -47,7 +47,7 @@ export function VendoActivities({ pollMs = 5000, maxItems = 8 }: VendoActivities
 
   return (
     <ChromeRoot>
-      <section aria-label="Vendo activity" style={{ display: "grid", gap: "14px" }}>
+      <section aria-label="AI activity" style={{ display: "grid", gap: "14px" }}>
         {current ? (
           <section aria-labelledby={`${headingId}-approvals`} style={{ display: "grid", gap: "10px" }}>
             <header>

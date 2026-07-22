@@ -56,7 +56,7 @@ describe("VendoTrigger", () => {
 
   it("falls back to a default label without children", () => {
     mount(<VendoTrigger prompt="Do something" />);
-    expect(screen.getByRole("button", { name: "Ask Vendo" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Ask AI" })).toBeTruthy();
   });
 
   it("never renders the no-policy banner beside itself on an unconfigured host", async () => {

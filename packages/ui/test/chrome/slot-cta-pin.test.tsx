@@ -50,9 +50,9 @@ describe("VendoSlot empty-state CTA + pinned-component path (ENG-223)", () => {
         <VendoOverlay launcher="none" />
       </VendoProvider>,
     );
-    expect(screen.queryByRole("dialog", { name: "Vendo assistant" })).toBeNull();
+    expect(screen.queryByRole("dialog", { name: "AI assistant" })).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: /design a view/i }));
-    expect(await screen.findByRole("dialog", { name: "Vendo assistant" })).toBeTruthy();
+    expect(await screen.findByRole("dialog", { name: "AI assistant" })).toBeTruthy();
   });
 
   it("suggestion chips prefill the conversation composer — never send", async () => {
@@ -63,7 +63,7 @@ describe("VendoSlot empty-state CTA + pinned-component path (ENG-223)", () => {
       </VendoProvider>,
     );
     fireEvent.click(screen.getByRole("button", { name: "Track my upcoming renewals" }));
-    await screen.findByRole("dialog", { name: "Vendo assistant" });
+    await screen.findByRole("dialog", { name: "AI assistant" });
     const composer = await screen.findByRole("textbox", { name: /message/i });
     await waitFor(() => expect((composer as HTMLTextAreaElement).value).toBe("Track my upcoming renewals"));
     // Prefill only: nothing was sent over the wire.
@@ -85,7 +85,7 @@ describe("VendoSlot empty-state CTA + pinned-component path (ENG-223)", () => {
     render(<VendoProvider client={client}><VendoSlot id="hero" /></VendoProvider>);
     const cta = screen.getByRole("button", { name: /design a view/i });
     expect(() => fireEvent.click(cta)).not.toThrow();
-    expect(screen.queryByRole("dialog", { name: "Vendo assistant" })).toBeNull();
+    expect(screen.queryByRole("dialog", { name: "AI assistant" })).toBeNull();
   });
 
   it("mounts a pinned component in the slot, in place of the host children", async () => {

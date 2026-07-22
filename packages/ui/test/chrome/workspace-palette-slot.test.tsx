@@ -54,7 +54,7 @@ describe("VendoPage, VendoPalette, and VendoSlot exports", () => {
     opener.focus();
     fireEvent.keyDown(globalThis, { key: "k", ctrlKey: true });
     // One surface: the conversation overlay, composer focused, no combobox.
-    const dialog = await screen.findByRole("dialog", { name: "Vendo assistant" });
+    const dialog = await screen.findByRole("dialog", { name: "AI assistant" });
     expect(screen.queryByRole("combobox")).toBeNull();
     const composer = await screen.findByRole("textbox", { name: "Message" });
     await waitFor(() => expect(document.activeElement).toBe(composer));
@@ -63,16 +63,16 @@ describe("VendoPage, VendoPalette, and VendoSlot exports", () => {
     expect(onCommand).toHaveBeenCalledWith(expect.objectContaining({ kind: "open-app", appId: "app_1" }));
     // Escape closes the surface and restores focus to the invoker.
     fireEvent.keyDown(dialog, { key: "Escape" });
-    await waitFor(() => expect(screen.queryByRole("dialog", { name: "Vendo assistant" })).toBeNull());
+    await waitFor(() => expect(screen.queryByRole("dialog", { name: "AI assistant" })).toBeNull());
     await waitFor(() => expect(document.activeElement).toBe(opener));
 
     // ⌘K toggles: open, then a second press (even from the composer) closes.
     fireEvent.keyDown(globalThis, { key: "k", metaKey: true });
-    await screen.findByRole("dialog", { name: "Vendo assistant" });
+    await screen.findByRole("dialog", { name: "AI assistant" });
     const reopenedComposer = await screen.findByRole("textbox", { name: "Message" });
     await waitFor(() => expect(document.activeElement).toBe(reopenedComposer));
     fireEvent.keyDown(reopenedComposer, { key: "k", metaKey: true });
-    await waitFor(() => expect(screen.queryByRole("dialog", { name: "Vendo assistant" })).toBeNull());
+    await waitFor(() => expect(screen.queryByRole("dialog", { name: "AI assistant" })).toBeNull());
     await waitFor(() => expect(document.activeElement).toBe(opener));
   });
 

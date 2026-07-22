@@ -39,9 +39,21 @@
       "types": "./dist/server.d.ts",
       "default": "./dist/server.js"
     },
+    "./extract": {
+      "types": "./dist/extract.d.ts",
+      "default": "./dist/extract.js"
+    },
     "./react": {
       "types": "./dist/react.d.ts",
       "default": "./dist/react.js"
+    },
+    "./ai-sdk": {
+      "types": "./dist/ai-sdk.d.ts",
+      "default": "./dist/ai-sdk.js"
+    },
+    "./mastra": {
+      "types": "./dist/mastra.d.ts",
+      "default": "./dist/mastra.js"
     },
     "./auth/auth0": {
       "types": "./dist/auth-presets/auth0.d.ts",

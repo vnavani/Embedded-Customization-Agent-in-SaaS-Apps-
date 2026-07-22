@@ -93,7 +93,7 @@ describe("VendoActivities", () => {
 
   it("is a labeled region", async () => {
     mount();
-    expect(await screen.findByRole("region", { name: "Vendo activity" })).toBeTruthy();
+    expect(await screen.findByRole("region", { name: "AI activity" })).toBeTruthy();
   });
 
   it("pages multiple approvals as one card and advances on decide", async () => {

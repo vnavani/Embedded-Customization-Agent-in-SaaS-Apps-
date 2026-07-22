@@ -28,7 +28,7 @@ test("CTA activated — opens the conversation surface", async ({ page }) => {
   // conversation overlay with the composer focused.
   await openScenario(page, "slot-empty");
   await page.getByRole("button", { name: /design a view/i }).click();
-  await expect(page.getByRole("dialog", { name: "Vendo assistant" })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "AI assistant" })).toBeVisible();
   await page.screenshot({ path: shotPath("03-cta-activated-palette"), fullPage: false, animations: "disabled" });
 });
 

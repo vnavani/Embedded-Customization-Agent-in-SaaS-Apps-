@@ -1,4 +1,4 @@
-/** @vendoai/apps — the app artifact and engine (docs/contracts/06-apps.md).
+/** @vendoai/apps — the app artifact and engine (docs/archive/contracts/06-apps.md).
  *
  * The sandbox seam is the execution-v2 shape (sandbox.ts); the v1 seam and
  * its compat bridge are deleted (execution-v2 Wave 1.5).

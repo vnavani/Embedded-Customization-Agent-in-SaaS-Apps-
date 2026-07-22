@@ -1,4 +1,4 @@
-/** @vendoai/store — persistence under everything (docs/contracts/02-store.md). */
+/** @vendoai/store — persistence under everything (docs/archive/contracts/02-store.md). */
 export { createStore, type VendoStore } from "./store.js";
 // The reserved-collection map (02-store §2): exported so remote StoreAdapters
 // (the umbrella's hostedStore) can mirror this engine's per-collection

@@ -43,7 +43,7 @@ describe("lane-cards picks", () => {
   it("1-A: synthesizes a structured consequence from the real Slack inputs", () => {
     const presentation = toolPresentation("slack_SLACK_SEND_MESSAGE", slackApproval.call.args);
     expect(presentation.consequence).toEqual({
-      pre: "Vendo will post ",
+      pre: "The agent will post ",
       artifact: "“Morning digest: 7 renewals in the next 30 days, 2 at risk.”",
       mid: " to ",
       target: "#renewals",
@@ -64,7 +64,7 @@ describe("lane-cards picks", () => {
   it("1-A: leads with the consequence and folds the real inputs behind Details", () => {
     render(<VendoProvider client={client}><ApprovalCard approval={slackApproval} onDecide={() => undefined} /></VendoProvider>);
     const sentence = document.querySelector(".fl-approval-consequence-line");
-    expect(sentence?.textContent).toContain("Vendo will post");
+    expect(sentence?.textContent).toContain("The agent will post");
     expect(sentence?.textContent).toContain("#renewals");
     // The fields never leave the DOM — folded, same a11y name.
     const details = document.querySelector("details.fl-approval-details");

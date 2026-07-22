@@ -210,7 +210,7 @@ export function VendoSlot({ id, appId: appIdProp, pin, onAuthor, remix = false, 
   };
 
   const remixButton = remix ? (
-    <button type="button" className="fl-slot-remix" aria-label={`Remix ${id} with Vendo`} aria-busy={remixLatched || undefined} disabled={remixLatched} onClick={startRemix}>
+    <button type="button" className="fl-slot-remix" aria-label={`Remix ${id} with AI`} aria-busy={remixLatched || undefined} disabled={remixLatched} onClick={startRemix}>
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="m12 3 1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3Z" />
       </svg>

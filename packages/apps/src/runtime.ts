@@ -550,7 +550,7 @@ export interface AppsRuntime {
    * gated by the guard's existing high-risk approval flow. The grant NEVER
    * travels with a copy: it lives in its own store collection keyed by the app
    * id, so exportApp/importApp/fork/share/publish (all of which mint or copy a
-   * fresh app id) can never carry it. Requires a docs/contracts/06-apps.md §4.3
+   * fresh app id) can never carry it. Requires a docs/archive/contracts/06-apps.md §4.3
    * amendment (parked, Yousef-gated).
    */
   secrets: {

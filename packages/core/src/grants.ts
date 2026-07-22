@@ -92,6 +92,9 @@ export interface ApprovalRequest {
     appId?: AppId;
     trigger?: TriggerRef;
   };
+  /** Subjects authorized to decide this approval instead of the requester
+   *  (multiplayer-enterprise spec, increment 1). Absent → self-approval. */
+  approvers?: string[];
   createdAt: IsoDateTime;
 }
 
@@ -112,6 +115,7 @@ export const approvalRequestSchema = z.object({
     appId: appIdSchema.optional(),
     trigger: triggerRefSchema.optional(),
   }).passthrough(),
+  approvers: z.array(z.string().min(1)).optional(),
   createdAt: isoDateTimeSchema,
 }).passthrough() satisfies z.ZodType<ApprovalRequest>;
 

@@ -10,9 +10,13 @@ The 11 published packages — the 10 `@vendoai/*` blocks plus the `vendoai` alia
 to the same version (see `fixed` in `config.json`). `@vendoai/telemetry` is
 deliberately **left out of the fixed group** so it versions independently (it is
 a pure leaf and only bumps when a changeset explicitly targets it — it cannot be
-added to `ignore` because `@vendoai/vendo` depends on it). All other workspaces
-(`apps/*`, `fixtures/*`, `bench`, `corpus/*`, `spikes/*`) are `private` and are
-never versioned or published.
+added to `ignore` because `@vendoai/vendo` depends on it). `@vendoai/engine` is
+also deliberately outside the group: it is not a dependency of any Vendo package
+— `vendo init`'s last-resort engine rung fetches it via `npm exec` at a version
+pinned in the CLI, so it versions independently and only bumps (with the pin)
+when the runner itself changes. All other workspaces (`apps/*`, `fixtures/*`,
+`bench`, `corpus/*`, `spikes/*`) are `private` and are never versioned or
+published.
 
 ## Adding a changeset
 

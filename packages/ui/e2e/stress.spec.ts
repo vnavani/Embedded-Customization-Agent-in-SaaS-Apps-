@@ -52,9 +52,9 @@ test("rapid overlay open/close never dumps focus to the body or leaves a ghost d
   const launcher = page.getByRole("button", { name: "AI agent" });
   for (let i = 0; i < 6; i += 1) {
     await launcher.click();
-    await expect(page.getByRole("dialog", { name: "Vendo assistant" })).toBeVisible();
+    await expect(page.getByRole("dialog", { name: "AI assistant" })).toBeVisible();
     await page.keyboard.press("Escape");
-    await expect(page.getByRole("dialog", { name: "Vendo assistant" })).toBeHidden();
+    await expect(page.getByRole("dialog", { name: "AI assistant" })).toBeHidden();
     // Focus restores to the launcher, never to <body> (ENG-220).
     await expect(launcher).toBeFocused();
   }
@@ -85,9 +85,9 @@ test("concurrent surfaces coexist: the palette keybinding stays a singleton", as
   // One ⌘K opens exactly ONE conversation surface even with several providers
   // on the page (one-surface ⌘K: the palette dialog no longer exists).
   await page.keyboard.press("Meta+k");
-  await expect(page.getByRole("dialog", { name: "Vendo assistant" })).toHaveCount(1);
+  await expect(page.getByRole("dialog", { name: "AI assistant" })).toHaveCount(1);
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("dialog", { name: "Vendo assistant" })).toBeHidden();
+  await expect(page.getByRole("dialog", { name: "AI assistant" })).toBeHidden();
 });
 
 test("dark-brand host renders readable chrome (light-dark derives from background)", async ({ page }) => {

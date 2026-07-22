@@ -56,7 +56,7 @@ export interface ToolPresentation {
   consequence?: ToolConsequence;
 }
 
-/** "Vendo will post ‹artifact› to ‹target› — now, as you." in parts. */
+/** "The agent will post ‹artifact› to ‹target› — now, as you." in parts. */
 export interface ToolConsequence {
   pre: string;
   artifact?: string;
@@ -81,12 +81,12 @@ export function toolPresentation(name: string, args?: unknown, meta?: ToolMeta):
   let consequence: ToolConsequence | undefined;
   if (toolkit === "slack" && typeof flat.channel === "string") {
     description ??= trigger
-      ? `Vendo will post to ${flat.channel} on your behalf, ${trigger}. It runs as you, and you can pause it anytime.`
-      : `Vendo will post to ${flat.channel} on your behalf, running as you.`;
+      ? `The agent will post to ${flat.channel} on your behalf, ${trigger}. It runs as you, and you can pause it anytime.`
+      : `The agent will post to ${flat.channel} on your behalf, running as you.`;
     sub = trigger ? `Posts to ${flat.channel} ${trigger}` : `Posts to ${flat.channel} as you`;
     if (typeof flat.message === "string" && flat.message.trim().length > 0) {
       consequence = {
-        pre: "Vendo will post ",
+        pre: "The agent will post ",
         artifact: `“${flat.message}”`,
         mid: " to ",
         target: flat.channel,
@@ -94,7 +94,7 @@ export function toolPresentation(name: string, args?: unknown, meta?: ToolMeta):
       };
     }
   } else if (toolkit === "gmail" && typeof flat.to === "string") {
-    description ??= `Vendo will send this email as you${trigger ? `, ${trigger}` : ""}.`;
+    description ??= `The agent will send this email as you${trigger ? `, ${trigger}` : ""}.`;
     sub = `Emails ${flat.to} as you`;
     // No consequence for Gmail: the email's subject/body/copied recipients ARE
     // the message, and a sentence naming only `to` would fold them out of

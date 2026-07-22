@@ -16,7 +16,7 @@ const check = (name, pass, detail = "") => {
 };
 
 const overlayState = () => ({
-  dialog: !!document.querySelector('[role="dialog"][aria-label="Vendo assistant"]'),
+  dialog: !!document.querySelector('[role="dialog"][aria-label="AI assistant"]'),
   portalParentIsBody: document.querySelector(".fl-overlay-portal")?.parentElement === document.body,
   bodyOverflow: document.body.style.overflow,
   inertCount: [...document.body.children].filter(el => el.hasAttribute("inert")).length,
@@ -28,7 +28,7 @@ const overlayState = () => ({
 });
 
 async function expectOpenInvariants(page, name) {
-  await page.waitForSelector('[role="dialog"][aria-label="Vendo assistant"]', { timeout: 10_000 });
+  await page.waitForSelector('[role="dialog"][aria-label="AI assistant"]', { timeout: 10_000 });
   const s = await page.evaluate(overlayState);
   check(`${name}: overlay open`, s.dialog);
   check(`${name}: panel portaled to <body>`, s.portalParentIsBody);
@@ -40,7 +40,7 @@ async function expectOpenInvariants(page, name) {
 }
 
 async function expectClosedInvariants(page, name, how) {
-  await page.waitForFunction(() => !document.querySelector('[role="dialog"][aria-label="Vendo assistant"]'));
+  await page.waitForFunction(() => !document.querySelector('[role="dialog"][aria-label="AI assistant"]'));
   const s = await page.evaluate(overlayState);
   check(`${name}: ${how} closes + scroll/inert cleaned`, !s.dialog && s.bodyOverflow === "" && s.inertCount === 0);
 }
@@ -71,7 +71,7 @@ console.log(`  (restored focus target: ${activeTag})`);
 
 // ⌘K toggles closed too (programmatic close path through the host hook).
 await page.keyboard.press(CMDK);
-await page.waitForSelector('[role="dialog"][aria-label="Vendo assistant"]');
+await page.waitForSelector('[role="dialog"][aria-label="AI assistant"]');
 await page.keyboard.press(CMDK);
 await expectClosedInvariants(page, "Maple", "⌘K toggle");
 await page.screenshot({ path: `${OUT}05-after-maple-closed-restored.png` });
